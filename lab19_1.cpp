@@ -20,21 +20,69 @@ string toUpperStr(string x){
     return y;
 }
 
-void importDataFromFile(){
+void importDataFromFile(string name_score,vector<string> &name,vector<int> &score,vector<char> &grade){
+    ifstream Mem;
+    Mem.open(name_score);
+    string textl;
+    while(getline(Mem,textl)){
+        int a = textl.find(':');
+        string w;   
+        w = (textl.substr(0,a));
+        name.push_back(w);
 
+        textl = textl.erase(0,a+2);
+        int x,y,z,sum=0;
+        char *chartext = const_cast<char*>(textl.c_str()); 
+        sscanf(chartext,"%d %d %d",&x,&y,&z);
+        sum = x+y+z;
+        score.push_back(sum);
+    
+        char grades = score2grade(sum);
+        grade.push_back(grades);   
+    }
+    Mem.close();
 }
 
-void getCommand(){
-
+void getCommand(string &command,string &key){
+    string Search;
+    cout << "Please input your command: ";
+    getline(cin,Search);
+    int a = Search.find(' ') , b = Search.size();
+    command = (Search.substr(0,a));
+    key = (Search.substr(a+1,b));
 }
 
-void searchName(){
-
+void searchName(vector<string> name,vector<int> score,vector<char> grade,string key){
+    int j=name.size(),count =0;
+    cout<<"---------------------------------\n";
+    for(int i=0;i<j;i++){
+        if(key == toUpperStr(name[i])){
+            cout<<name[i]<<"'s score = "<<score[i]<<endl;
+            cout<<name[i]<<"'s grade = "<<grade[i]<<endl;
+            count++;
+        }
+    }
+    if(count == 0){
+        cout<<"Cannot found.\n";
+    }
+    cout<<"---------------------------------\n";
 }
 
-void searchGrade(){
-
+void searchGrade(vector<string> name,vector<int> score,vector<char> grade,string key){
+    int j=name.size(),count=0;
+    cout<<"---------------------------------\n";
+    for(int i=0;i<j;i++){
+        if(key[0] == grade[i]){
+            cout<<name[i]<<" (" <<score[i]<<')'<<endl;
+            count++;
+        }
+    }
+    if(count == 0){
+        cout<<"Cannot found.\n";
+    }
+    cout<<"---------------------------------\n";
 }
+
 
 
 int main(){
